@@ -6,6 +6,7 @@ import SignUp from './components/SignUp.jsx'
 import PendingPage from './pages/PendingPage.jsx'
 import Completed from './pages/Completed.jsx'
 import Profile from './components/Profile.jsx'
+import Dashboard from './pages/Dashboard.jsx'
 
 const App = () => {
   const navigate = useNavigate()
@@ -22,7 +23,7 @@ const App = () => {
     }
   }, [currentUser])
 
-  const handleAuthSubmit = data => {
+  const handleAuthSubmit = (data) => {
     const user = {
       email: data.email,
       name: data.name || 'User',
@@ -31,23 +32,22 @@ const App = () => {
       )}&background=random`
     }
     setCurrentUser(user)
-    navigate('/', { replace: true })
+    navigate('/dashboard', { replace: true })   // ✅ Redirect to Dashboard after login/signup
   }
 
   const handleLogout = () => {
+    localStorage.removeItem('currentUser')
     localStorage.removeItem('token')
     setCurrentUser(null)
     navigate('/login', { replace: true })
   }
 
   // Protected layout wrapper
-  const ProtectedLayout = () => {
-    return (
-      <Layout user={currentUser} onLogout={handleLogout}>
-        <Outlet />
-      </Layout>
-    )
-  }
+  const ProtectedLayout = () => (
+    <Layout user={currentUser} onLogout={handleLogout}>
+      <Outlet />
+    </Layout>
+  )
 
   return (
     <Routes>
@@ -77,9 +77,19 @@ const App = () => {
         }
       />
 
-      <Route path='/pending' element={<PendingPage/>}/>
-      <Route path='/completed' element={<Completed/>}/>
-      <Route path='/profile' element={<Profile user={currentUser} setCurrentUser={setCurrentUser} onLogout={handleLogout}/>}/>
+      {/* Public routes */}
+      <Route path="/pending" element={<PendingPage />} />
+      <Route path="/completed" element={<Completed />} />
+      <Route
+        path="/profile"
+        element={
+          <Profile
+            user={currentUser}
+            setCurrentUser={setCurrentUser}
+            onLogout={handleLogout}
+          />
+        }
+      />
 
       {/* Protected routes */}
       <Route
@@ -87,8 +97,9 @@ const App = () => {
           currentUser ? <ProtectedLayout /> : <Navigate to="/login" replace />
         }
       >
-        <Route path="/" element={<div>Welcome, {currentUser?.name}!</div>} />
-        
+        {/* ✅ Redirect "/" to "/dashboard" */}
+        <Route path="/" element={<Navigate to="/dashboard" replace />} /> 
+        <Route path="/dashboard" element={<Dashboard />} />
       </Route>
     </Routes>
   )
