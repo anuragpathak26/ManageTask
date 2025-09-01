@@ -22,6 +22,8 @@ import { CalendarIcon, Filter, HomeIcon, Plus } from 'lucide-react'
 import { useOutletContext } from 'react-router-dom'
 import axios from 'axios'
 import TaskModel from '../components/TaskModel'
+import TaskItem from '../components/TaskItem'
+
 
 const API_BASE = 'http://localhost:4000/api/tasks'
 
