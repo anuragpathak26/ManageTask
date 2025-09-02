@@ -83,6 +83,6 @@ Task_manager/
 <img width="1919" height="875" alt="Login png" src="https://github.com/user-attachments/assets/4c0b0974-d1ee-4247-9e99-1856a94bfd27" />
 
 
-## License
-This project is licensed under the MIT License.
+
+
 
