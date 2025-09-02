@@ -26,13 +26,13 @@ const App = () => {
   const handleAuthSubmit = (data) => {
     const user = {
       email: data.email,
-      name: data.name || 'User',
+      name: data.name || data.user?.name || 'User',
       avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(
-        data.name || 'User'
+        data.name || data.user?.name || 'User'
       )}&background=random`
     }
     setCurrentUser(user)
-    navigate('/dashboard', { replace: true })   // ✅ Redirect to Dashboard after login/signup
+    navigate('/dashboard', { replace: true })
   }
 
   const handleLogout = () => {
@@ -77,20 +77,6 @@ const App = () => {
         }
       />
 
-      {/* Public routes */}
-      <Route path="/pending" element={<PendingPage />} />
-      <Route path="/completed" element={<Completed />} />
-      <Route
-        path="/profile"
-        element={
-          <Profile
-            user={currentUser}
-            setCurrentUser={setCurrentUser}
-            onLogout={handleLogout}
-          />
-        }
-      />
-
       {/* Protected routes */}
       <Route
         element={
@@ -100,7 +86,21 @@ const App = () => {
         {/* ✅ Redirect "/" to "/dashboard" */}
         <Route path="/" element={<Navigate to="/dashboard" replace />} /> 
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/pending" element={<PendingPage />} />
+        <Route path="/completed" element={<Completed />} />
+        <Route
+          path="/profile"
+          element={
+            <Profile
+              user={currentUser}
+              setCurrentUser={setCurrentUser}
+              onLogout={handleLogout}
+            />
+          }
+        />
       </Route>
+
+
     </Routes>
   )
 }

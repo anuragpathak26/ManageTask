@@ -1,6 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import {baseControlClasses, DEFAULT_TASK, priorityStyles} from '../assets/dummy.jsx'
 import { AlignLeft, Calendar, CheckCircle, Flag, PlusCircle, Save, X } from 'lucide-react'
+const baseControlClasses = 'w-full px-4 py-2.5 border border-purple-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-sm'
+const priorityStyles = {
+  Low: 'bg-green-100 text-green-700 border-green-200',
+  Medium: 'bg-purple-100 text-purple-700 border-purple-200',
+  High: 'bg-fuchsia-100 text-fuchsia-700 border-fuchsia-200',
+}
+const DEFAULT_TASK = { title: '', description: '', priority: 'Low', dueDate: '', completed: 'No', id: null }
 
 const API_BASE = 'http://localhost:4000/api/tasks'
 

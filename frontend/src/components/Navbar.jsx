@@ -24,8 +24,7 @@ const Navbar = ({user={},onLogout}) => {
                 from-fuchsia-500 via-purple-500 to-indigo-500 shadow-lg group-hover:shadow-purple-300/50
                 group-hover:scale-105 transition-all duration-300'>
                     <ClipboardList className='w-6 h-6 text-white'/>
-                    <div className='absolutr -bottom-1 -middle-1 w-3 h-3 bg-white rounded-full shadow-md
-                    animate-ping'/>
+                    
                 </div>
 
                 <span className='text-2xl font-extrabold bg-gradient-to-r from-fuchsia-500 via-purple-500
@@ -45,19 +44,25 @@ const Navbar = ({user={},onLogout}) => {
                     <button onClick={handleMenuToggle} className='flex items-center gap-2 px-3
                     py2 rounded-full cursor-pointer hover:bg-purple-50 transition-clors duration-300 border
                     border-transparent hover:border-purple-200'>
-                        <div className='relative'>
-                            {user.avatar ? (
-                                <img src={user.img} alt='Avatar' className='w-9 h-9 rounded-full
-                                shadow-sm'/>
-                            ):(
-                                <div className='w-8 h-8 flex items-center justify-center rounded-full
-                                bg-gradient-to-br from-fuchsia-500 to-purple-600 text-white font-semibold'>
-                                    {user.name?.[0]?.toUpperCase() || 'U'}
+                        <div className="relative">
+                            {user.img ? (
+                                <img
+                                src={user.img}
+                                alt="Avatar"
+                                className="w-10 h-10 rounded-full shadow-sm object-cover"
+                                />
+                            ) : (
+                                <div className="w-10 h-10 flex items-center justify-center rounded-full
+                                bg-gradient-to-br from-fuchsia-500 to-purple-600 text-white font-semibold">
+                                {user.name?.[0]?.toUpperCase() || 'U'}
                                 </div>
                             )}
-                            <div className='absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-400
-                            rounded-full border-2 border-white animate-pulse'/>
+
+                            
+                            <div className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-400
+                            rounded-full border-2 border-white animate-pulse" />
                         </div>
+
 
                         <div className='text-left hidden md:block'>
                             <p className=' text-sm font-medium text-gray-800'>{user.name}</p>

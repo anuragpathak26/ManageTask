@@ -1,9 +1,22 @@
 import React, { useState,useEffect} from 'react'
-import { getPriorityColor, MENU_OPTIONS, TI_CLASSES } from '../assets/dummy'
 import { Calendar, CheckCircle2, Clock, MoreVertical, ReceiptRussianRuble } from 'lucide-react'
 import axios from 'axios'
 import {format, isToday} from 'date-fns'
 import TaskModel from './TaskModel'
+const getPriorityColor = (priority) => {
+  const colors = {
+    low: 'border-green-500 bg-green-50/50 text-green-700',
+    medium: 'border-purple-500 bg-purple-50/50 text-purple-600',
+    high: 'border-fuchsia-800 bg-fuchsia-50/50 text-fuchsia-800',
+  }
+  return colors[priority?.toLowerCase()] || 'border-gray-500 bg-gray-50/50 text-gray-700'
+}
+
+const MENU_OPTIONS = [
+  { action: 'edit', label: 'Edit Task', icon: <ReceiptRussianRuble size={14} className='text-purple-600' /> },
+  { action: 'delete', label: 'Delete Task', icon: <ReceiptRussianRuble size={14} className='text-red-600' /> },
+]
+
 
 const API_BASE = 'http://localhost:4000/api/tasks'
 
@@ -17,7 +30,7 @@ const [isCompleted, setIsCompleted] = useState(
 )
 
 const [showEditModal, setShowEditModal] = useState(false)
-const [subtasks, setSubtasks] = useState(task.subtasks || [])
+// const [subtasks] = useState(task.subtasks || [])
 
 useEffect(() => {
   setIsCompleted(
@@ -81,16 +94,16 @@ const getAuthHeaders = () => {
     }
   }
 
-  const progress = subtasks.length ? (subtasks.filter(st => st.completed).length / subtasks.length)*100 : 0
+  // const progress = subtasks.length ? (subtasks.filter(st => st.completed).length / subtasks.length)*100 : 0
 
   return (
     <>
-    <div className={`${TI_CLASSES.wrapper} ${borderColor}`}>
-      <div className={TI_CLASSES.leftContainer}>
+    <div className={`group p-4 sm:p-5 rounded-xl shadow-sm bg-white border-l-4 hover:shadow-md transition-all duration-300 border border-purple-100 ${borderColor}`}>
+      <div className={'flex items-start gap-2 sm:gap-3 flex-1 min-w-0'}>
         {showCompletedCheckbox && (
             <button onClick={handleComplete}
-            className={`${TI_CLASSES.completeBtn} ${isCompleted ? 'text-green-500 ': 'text-gray-200'}`}>
-                <CheckCircle2 size={18} className={`${TI_CLASSES.checkboxIconBase} ${
+            className={`mt-0.5 sm:mt-1 p-1 sm:p-1.5 rounded-full hover:bg-purple-100 transition-colors duration-300 ${isCompleted ? 'text-green-500 ': 'text-gray-200'}`}>
+                <CheckCircle2 size={18} className={`w-4 h-4 sm:w-5 sm:h-5 ${
                     isCompleted ? 'fill-gray-500' : ''
                 }`}/>
             </button>
@@ -98,30 +111,30 @@ const getAuthHeaders = () => {
 
         <div className=' flex-1 min-w-0'>
             <div className='flex items-baseline gap-2 mb-1 flex-wrap'>
-                <h3 className={`${TI_CLASSES.titleBase}
+                <h3 className={`text-base sm:text-lg font-medium truncate
                 ${isCompleted ? 'text-gray-400 line-through' : 'text-gray-800'}`}>
                     {task.title}
                 </h3>
-                <span className={`${TI_CLASSES.priorityBadge}
+                <span className={`text-xs px-2 py-0.5 rounded-full shrink-0
                 ${getPriorityColor(task.priority)}`}>
                     {task.priority}
                 </span>
             </div>
 
-            {task.description && <p className={TI_CLASSES.description}>
+            {task.description && <p className={'text-sm text-gray-500 mt-1 truncate'}>
                 {task.description}</p>}
         </div>
       </div>
 
-      <div className={TI_CLASSES.rightContainer}>
+      <div className={'flex flex-col items-end gap-2 sm:gap-3'}>
         <div className='relative'>
             <button onClick={() => setShowMenu(!showMenu)}
-                className={TI_CLASSES.menuButton}>
+                className={'p-1 sm:p-1.5 hover:bg-purple-100 rounded-lg text-gray-500 hover:text-purple-700 transition-colors duration-200'}>
                    <MoreVertical className='w-4 h-4 sm:W-5 sm:h-5' size={18}/>
             </button>
 
             {showMenu && (
-                <div className={TI_CLASSES.menuDropdown}>
+                <div className={'absolute right-0 mt-1 w-40 sm:w-48 bg-white border border-purple-100 rounded-xl shadow-lg z-10 overflow-hidden animate-fadeIn'}>
                   {MENU_OPTIONS.map(opt => (
                     <button 
                       key={opt.action} 
@@ -136,14 +149,14 @@ const getAuthHeaders = () => {
         </div>
 
         <div>
-          <div className={`${TI_CLASSES.dateRow} ${task.dueDate && isToday(new Date(task.dueDate))
+          <div className={`flex items-center gap-1.5 text-xs font-medium whitespace-nowrap ${task.dueDate && isToday(new Date(task.dueDate))
           ? 'text-fuchsia-600':'text-gray-500'}`}>
             <Calendar className='w-3.5 h-3.5'/>
             {task.dueDate ? (isToday(new Date(task.dueDate)) ?
             'Today' : format(new Date(task.dueDate), 'MMM-dd')) : '-'}
           </div>
 
-          <div className={TI_CLASSES.createdRow}>
+          <div className={'flex items-center gap-1.5 text-xs text-gray-400 whitespace-nowrap'}>
             <Clock className='w-3 h-3 sm:w-3.5 sm:h-3.5'/>
             {task.createdAt ? 
             `Created ${format(new Date(task.createdAt), 'MMM-dd')}` : 'No date'}
